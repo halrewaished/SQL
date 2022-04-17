@@ -1,0 +1,141 @@
+# DDL - Create
+
+create database store;
+
+use store;
+create table countries(
+codee int primary key,
+namee varchar(20),
+continent_name varchar(20)
+);
+
+use store;
+create table users(
+id int primary key,
+full_name varchar(20),
+email varchar(20),
+gender char(1),
+date_of_birth varchar(15),
+created_at datetime,
+country_code int,
+foreign key (country_code) references countries(codee)
+);
+
+use store;
+create table orders(
+id int primary key,
+user_id int,
+status varchar(6),
+created_at datetime,
+foreign key (user_id) references users(id)
+);
+
+use store;
+create table products(
+id int primary key,
+name varchar(10),
+price int,
+status varchar(10),
+created_at datetime
+);
+
+use store;
+create table order_products(
+order_id int,
+product_id int,
+quantity int,
+foreign key (order_id) references orders(id),
+foreign key (product_id) references products(id)
+);
+
+
+# DDL - Alter
+
+use store;
+alter table countries add constraint c_name unique(namee);
+
+use store;
+alter table countries
+modify continent_name varchar(20) not null;
+
+use store;
+alter table users add constraint u_email unique(email);
+
+use store;
+alter table users
+add constraint chk_gender 
+check (gender in ('m','f'));
+
+use store;
+alter table orders
+add constraint chk_status
+check (status in ('start','finish'));
+
+use store;
+ALTER TABLE order_products
+ALTER quantity SET DEFAULT 0;
+
+use store;
+ALTER TABLE products
+ALTER price SET DEFAULT 0;
+
+use store;
+alter table products
+modify name varchar(20) not null;
+
+
+use store;
+alter table products
+add constraint chk_status2
+check (status in ('valid','expired'));
+
+
+use store;
+alter table users
+modify column created_at
+datetime default current_timestamp;
+
+use store;
+alter table orders
+modify column created_at
+datetime default current_timestamp;
+
+use store;
+alter table products
+modify column created_at
+datetime default current_timestamp;
+
+
+
+# DML - Insert
+
+use store;
+insert into countries values (1,'Saudi Arabia','Asia');
+
+
+use store;
+insert into users values(10,"Haneen","h@gmail.com","f","1998",current_timestamp(),1);
+
+
+use store;
+insert into orders values(33,10,'start',current_timestamp());
+
+
+use store;
+insert into products values(55,'bag',500,'valid',current_timestamp());
+
+
+use store;
+insert into order_products values(33,55,100);
+
+
+# DML - Update
+
+
+use store;
+update countries set namee='Kuwait' where codee=1;
+
+# DML - Delete
+
+use store;
+delete from products where id = 55;
